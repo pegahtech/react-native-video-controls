@@ -770,6 +770,10 @@ export default class VideoPlayer extends Component {
     );
     if (currentTime > endTime)
       this.setState({ subtitleIndex: subtitleIndex + 1 });
+    /** IMPORTANT sometimes people rewind **/
+    if (currentTime < startTime)
+      this.setState({ subtitleIndex: subtitleIndex - 1 });
+    
     if (currentTime < endTime && currentTime > startTime) {
       return subtitles[subtitleIndex].text;
     } else return null;
@@ -800,7 +804,10 @@ export default class VideoPlayer extends Component {
         activeOpacity={0.3}
         onPress={() => {
           this.resetControlTimeout();
-          callback();
+          /** incase disable everything **/
+          if (typeof(callback) == 'function') {
+            callback();
+          }
         }}
         style={[styles.controls.control, style]}>
         {children}
@@ -1132,24 +1139,29 @@ const styles = {
       alignSelf: 'stretch',
       justifyContent: 'space-between'
     },
+    /** subtitle should display at the bottom center of the screen **/
     subtitle: {
+      width: '100%',
       color: 'white',
       textAlign: 'center',
       textShadowColor: 'black',
       textShadowOffset: { width: 1, height: 1 },
-      paddingRight: 10,
-      paddingLeft: 10
+      paddingHorizontal: 10,
+      fontSize: 16,
     },
     subtitleContainerPortrait: {
+      width: '100%',
       position: 'absolute',
-      top: 200,
-      left: 100,
-      alignItems: 'center'
+      bottom: 15,
+      left: 0,
+      alignItems: 'center',
     },
     subtitleContainerLandscape: {
+      width: '100%',
       position: 'absolute',
-      bottom: 50,
-      left: 250
+      bottom: 15,
+      left: 0,
+      alignItems: 'center',
     },
     video: {
       overflow: 'hidden',
