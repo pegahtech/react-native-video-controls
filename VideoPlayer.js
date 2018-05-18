@@ -770,9 +770,16 @@ export default class VideoPlayer extends Component {
     );
     if (currentTime > endTime)
       this.setState({ subtitleIndex: subtitleIndex + 1 });
-    /** IMPORTANT sometimes people rewind **/
-    if (currentTime < startTime)
-      this.setState({ subtitleIndex: subtitleIndex - 1 });
+    // rewind
+    if (subtitleIndex > 0 && currentTime < startTime) {
+      let idx = parseInt(subtitleIndex - 1) >=0 ? parseInt(subtitleIndex - 1) : 0;
+      let lastEndTime = this.parseTimeStringToDeciSecond(
+        subtitles[subtitleIndex - 1].endTime
+      );
+      if (currentTime < lastEndTime) {
+        this.setState({ subtitleIndex: subtitleIndex - 1 });
+      }
+    }
     
     if (currentTime < endTime && currentTime > startTime) {
       return subtitles[subtitleIndex].text;
@@ -804,7 +811,7 @@ export default class VideoPlayer extends Component {
         activeOpacity={0.3}
         onPress={() => {
           this.resetControlTimeout();
-          /** incase disable everything **/
+          // when disable all controls
           if (typeof(callback) == 'function') {
             callback();
           }
@@ -1139,7 +1146,7 @@ const styles = {
       alignSelf: 'stretch',
       justifyContent: 'space-between'
     },
-    /** subtitle should display at the bottom center of the screen **/
+    // subtitle position
     subtitle: {
       width: '100%',
       color: 'white',
