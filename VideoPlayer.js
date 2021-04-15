@@ -1110,11 +1110,12 @@ export default class VideoPlayer extends Component {
             style={[styles.player.video, this.styles.videoStyle]}
             source={this.props.source}
           />
-          {this.renderSubtitle()}
-          {this.renderError()}
-          {this.renderTopControls()}
-          {this.renderLoader()}
-          {this.renderBottomControls()}
+
+          { this.props.subtitle ? this.renderSubtitle() : null}
+          { !this.props.disableError ? this.renderError() : null }
+          { !this.props.disableBack || !this.props.disableVolume || !this.props.disableFullscreen ? this.renderTopControls() : null }
+          { !this.props.disableLoader ? this.renderLoader() : null }
+          { !this.props.disablePlayPause || !this.props.disableTimer || !this.props.disableSeekbar ? this.renderBottomControls() : null }
         </View>
       </TouchableWithoutFeedback>
     );
