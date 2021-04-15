@@ -128,7 +128,9 @@ export default class VideoPlayer extends Component {
      */
     this.styles = {
       videoStyle: this.props.videoStyle || {},
-      containerStyle: this.props.style || {}
+      containerStyle: this.props.style || {},
+      subtitleContainerStyle: this.props.subtitleContainerStyle || {},
+      subtitleStyle: this.props.subtitleStyle || {},
     };
   }
 
@@ -1075,10 +1077,10 @@ export default class VideoPlayer extends Component {
       <View
         style={
           this.props.isFullscreen
-            ? styles.player.subtitleContainerLandscape
-            : styles.player.subtitleContainerPortrait
+            ? [styles.player.subtitleContainerLandscape, this.styles.subtitleContainerStyle]
+            : [styles.player.subtitleContainerPortrait, this.styles.subtitleContainerStyle]
         }>
-        <Text style={styles.player.subtitle}>{this.showSubtitle()}</Text>
+        <Text style={[styles.player.subtitle, this.styles.subtitleStyle]}>{this.showSubtitle()}</Text>
       </View>
     );
   }
