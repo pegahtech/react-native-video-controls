@@ -128,7 +128,9 @@ export default class VideoPlayer extends Component {
      */
     this.styles = {
       videoStyle: this.props.videoStyle || {},
-      containerStyle: this.props.style || {}
+      containerStyle: this.props.style || {},
+      subtitleContainerStyle: this.props.subtitleContainerStyle || {},
+      subtitleStyle: this.props.subtitleStyle || {},
     };
   }
 
@@ -1075,10 +1077,10 @@ export default class VideoPlayer extends Component {
       <View
         style={
           this.props.isFullscreen
-            ? styles.player.subtitleContainerLandscape
-            : styles.player.subtitleContainerPortrait
+            ? [styles.player.subtitleContainerLandscape, this.styles.subtitleContainerStyle]
+            : [styles.player.subtitleContainerPortrait, this.styles.subtitleContainerStyle]
         }>
-        <Text style={styles.player.subtitle}>{this.showSubtitle()}</Text>
+        <Text style={[styles.player.subtitle, this.styles.subtitleStyle]}>{this.showSubtitle()}</Text>
       </View>
     );
   }
@@ -1108,11 +1110,12 @@ export default class VideoPlayer extends Component {
             style={[styles.player.video, this.styles.videoStyle]}
             source={this.props.source}
           />
-          {this.renderSubtitle()}
-          {this.renderError()}
-          {this.renderTopControls()}
-          {this.renderLoader()}
-          {this.renderBottomControls()}
+
+          { this.props.subtitle ? this.renderSubtitle() : null}
+          { !this.props.disableError ? this.renderError() : null }
+          { !this.props.disableBack || !this.props.disableVolume || !this.props.disableFullscreen ? this.renderTopControls() : null }
+          { !this.props.disableLoader ? this.renderLoader() : null }
+          { !this.props.disablePlayPause || !this.props.disableTimer || !this.props.disableSeekbar ? this.renderBottomControls() : null }
         </View>
       </TouchableWithoutFeedback>
     );
